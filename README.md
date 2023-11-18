@@ -1,0 +1,1 @@
+# GDL-GNN: Applying GPU Dataloading of Large Datasets for Graph Neural Network Inference
