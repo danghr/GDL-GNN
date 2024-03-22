@@ -178,6 +178,7 @@ def load_subgraph(
         )
 
         g, node_feat, _, _, _, _, _, _ = load_partition(config_json, part_id)
+        node_feat["_N/label"] = torch.nan_to_num(node_feat["_N/label"], 172).to(torch.int64)
         # g = dgl.add_self_loop(g)  # No need for GraphSAGE
         next_graph_queue.put((part_id, g, node_feat))
 
@@ -383,7 +384,7 @@ def run(
     if proc_id == 0:
         acc = MF.accuracy(
             pred_local,
-            labels_local.to(torch.int64),
+            labels_local,
             task="multiclass",
             num_classes=model_args[-1],
             ignore_index=172 if dataset_name == "ogbn-papers100M" else None,
